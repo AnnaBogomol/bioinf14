@@ -1,0 +1,15 @@
+import pandas as pd
+from scipy.stats import spearmanr
+df = pd.read_csv("healthy_breast.tsv", sep="\t", index_col=0)
+df = df.T
+df1 = df.iloc[:, 15335:15336]
+my_list = []
+for i in range (18490):
+  X = spearmanr(df1, df.iloc[:, i:i+1], axis=0)[0]
+  if X > 0.8:
+    my_list.append(i)
+  df2 = pd.DataFrame(my_list)
+  df2 = df2.T
+  genes = list(map(lambda i, df=df : df.columns[i], my_list))
+  df = pd.DataFrame(genes)
+print(df)
